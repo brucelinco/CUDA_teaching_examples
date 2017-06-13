@@ -1,12 +1,11 @@
 #include "book.h"
 #include <time.h>
-#define N   33*33*33*33 
+#define N   1024 
 
 __global__ void add( int *a, int *b, int *c ) {
     int tid = threadIdx.x;
-    while (tid < N){
+    if (tid < N){
         c[tid] = a[tid] + b[tid];
-	    tid += blockDim.x;	//each thread handles 32768/1024=32 positions
 	}
 }
 
