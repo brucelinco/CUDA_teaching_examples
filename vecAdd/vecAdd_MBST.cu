@@ -2,13 +2,12 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define N   32*32*32*32  
+#define N   1024  
 
 __global__ void add( int *a, int *b, int *c ) {
     int tid = blockIdx.x;
-    while (tid < N) {
+    if (tid < N) {
         c[tid] = a[tid] + b[tid];
-        tid += gridDim.x;	//each thread handles 32768/2048=16 locations
     }
 }
 
@@ -44,7 +43,7 @@ int main( void ) {
     cudaEventCreate(&stop);
     cudaEventRecord(start, 0);
 	
-    add<<<256,1>>>( dev_a, dev_b, dev_c );
+    add<<<1024, 1>>>( dev_a, dev_b, dev_c );
 	
     // Get stop time event    
     cudaEventRecord(stop, 0);
