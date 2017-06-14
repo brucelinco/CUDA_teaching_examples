@@ -29,10 +29,10 @@ void device_call(char* sourceImgPtr, char* patternImgPtr, int* host_result, int 
 	cudaMalloc((void**)&dev_result, r_h * r_w * sizeof(int));	
 	
 		// Get start time event
-    cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
-    cudaEventRecord(start, 0);
+ 	cudaEvent_t start, stop;
+    	cudaEventCreate(&start);
+    	cudaEventCreate(&stop);
+    	cudaEventRecord(start, 0);
 	//copy source and pattern image to GPU
 	
 	cudaMemcpy(dev_sourceImg, 
@@ -55,14 +55,14 @@ void device_call(char* sourceImgPtr, char* patternImgPtr, int* host_result, int 
 			   r_h * r_w * sizeof(int),
 			   cudaMemcpyDeviceToHost);
 	// Get stop time event    
-    cudaEventRecord(stop, 0);
-    cudaEventSynchronize(stop); 
+    	cudaEventRecord(stop, 0);
+    	cudaEventSynchronize(stop); 
 	// Compute execution time
-    float elapsedTime;
-    cudaEventElapsedTime(&elapsedTime, start, stop);
-    printf("GPU time: %13f msec\n", elapsedTime);
-    cudaEventDestroy(start);
-    cudaEventDestroy(stop);
+    	float elapsedTime;
+    	cudaEventElapsedTime(&elapsedTime, start, stop);
+    	printf("GPU time: %13f msec\n", elapsedTime);
+    	cudaEventDestroy(start);
+    	cudaEventDestroy(stop);
 
 }
 
@@ -80,7 +80,7 @@ __global__ void kernel (unsigned char* sourcePtr, unsigned char* patternPtr, int
 	
 	__shared__ int imgDIFF [threadsPerBlock];//16*16=256 elements
 	
-    // calculate image difference of source image and pattern image beginning 
+    	// calculate image difference of source image and pattern image beginning 
 	// at the position x and y of the source image
 	int diff = 0;
 	while(p_y < p_height){
@@ -98,15 +98,15 @@ __global__ void kernel (unsigned char* sourcePtr, unsigned char* patternPtr, int
 	__syncthreads(); 
 	 
 	int i = threadsPerBlock/2;
-    while (i != 0) {
-        if (cacheIndex < i)
-            imgDIFF[cacheIndex] += imgDIFF[cacheIndex + i];
-        __syncthreads();
-        i /= 2;
-    }
+    	while (i != 0) {
+        	if (cacheIndex < i)
+            		imgDIFF[cacheIndex] += imgDIFF[cacheIndex + i];
+        	__syncthreads();
+        	i /= 2;
+    	}	
 
-    if (cacheIndex == 0)
-        resultPtr[blockIdx.y*r_width+blockIdx.x] = imgDIFF[0];
+    	if (cacheIndex == 0)
+        	resultPtr[blockIdx.y*r_width+blockIdx.x] = imgDIFF[0];
 }
 
 int main( int argc, char** argv )
@@ -122,11 +122,7 @@ int main( int argc, char** argv )
 	CvPoint pt1, pt2;
 	int *host_result;
 	int result_height, result_width;
-	IplImage* sourceImgGuss;
-    IplImage* patternImgGuss;
 
-
-		
 	if( argc != 3 )
 	{
 	    printf("Using command: %s source_image search_image\n",argv[0]);
@@ -154,11 +150,8 @@ int main( int argc, char** argv )
 	result_width = sourceImg->width - patternImg->width + 1;
 	host_result=(int*)malloc(result_height * result_width * sizeof(int));
 	
-
-	
 	//call GPU.cu
 	device_call(sourceImg->imageData, patternImg->imageData, host_result, sourceImg->height, sourceImg->width, patternImg->height, patternImg->width, result_height, result_width);
-	
 	
 	for( y=0; y < result_height; y++ ) {
 		for( x=0; x < result_width; x++ ) {
@@ -177,28 +170,28 @@ int main( int argc, char** argv )
 	printf("minSAD is %d\n", minSAD);
     
 	//setup the two points for the best match
-    pt1.x = position.bestCol;
-    pt1.y = position.bestRow;
-    pt2.x = pt1.x + patternImg->width;
-    pt2.y = pt1.y + patternImg->height;
+    	pt1.x = position.bestCol;
+    	pt1.y = position.bestRow;
+    	pt2.x = pt1.x + patternImg->width;
+    	pt2.y = pt1.y + patternImg->height;
 
-    // Draw the rectangle in the source image
-    cvRectangle( sourceImg, pt1, pt2, CV_RGB(255,0,0), 3, 8, 0 );
+    	// Draw the rectangle in the source image
+    	cvRectangle( sourceImg, pt1, pt2, CV_RGB(255,0,0), 3, 8, 0 );
 			
 
 	cvNamedWindow( "sourceImage", 1 );
-    cvShowImage( "sourceImage", sourceImg );
+    	cvShowImage( "sourceImage", sourceImg );
 	cvNamedWindow( "patternImage", 1 );
-    cvShowImage( "patternImage", patternImg );
+    	cvShowImage( "patternImage", patternImg );
 	
 		
-    cvWaitKey(0); 
+    	cvWaitKey(0); 
  
-    cvDestroyWindow( "sourceImage" );
-    cvReleaseImage( &sourceImg );
+    	cvDestroyWindow( "sourceImage" );
+    	cvReleaseImage( &sourceImg );
 	cvDestroyWindow( "patternImage" );
-    cvReleaseImage( &patternImg );
-    return 0;
+    	cvReleaseImage( &patternImg );
+    	return 0;
 
 }
 
