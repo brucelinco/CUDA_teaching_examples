@@ -74,9 +74,9 @@ __global__ void kernel (unsigned char* sourcePtr, unsigned char* patternPtr, int
 	int s_y = blockIdx.y + threadIdx.y;
 	int p_x = threadIdx.x; 
 	int p_y = threadIdx.y;	
-	//int cacheIndex = p_y * blockDim.x + p_x;
-	int cacheIndex = p_y * p_width + p_x;
-	//int r_height = s_height-p_height+1;
+	int cacheIndex = p_y * blockDim.x + p_x;
+	//int cacheIndex = p_y * p_width + p_x;
+	int r_height = s_height-p_height+1;
 	int r_width = s_width-p_width+1;
 	
 	__shared__ int imgDIFF [threadsPerBlock];//16*16=256 elements
