@@ -75,7 +75,6 @@ __global__ void kernel (unsigned char* sourcePtr, unsigned char* patternPtr, int
 	int p_x = threadIdx.x; 
 	int p_y = threadIdx.y;	
 	int cacheIndex = p_y * blockDim.x + p_x;
-	//int cacheIndex = p_y * p_width + p_x;
 	int r_height = s_height-p_height+1;
 	int r_width = s_width-p_width+1;
 	
@@ -150,13 +149,6 @@ int main( int argc, char** argv )
 	printf("width of sourceImg:%d\n",patternImg->width);
 	printf("size of sourceImg:%d\n",patternImg->imageSize);
 	
-	//create space for sourceImgGuss and patternImgGuss
-    sourceImgGuss = cvCreateImage( cvSize( sourceImg->width*1, sourceImg->height*1 ),	8, 1 );
-    patternImgGuss = cvCreateImage( cvSize( patternImg->width*1, patternImg->height*1 ),	8, 1 );
-	
-	cvSmooth( sourceImg, sourceImgGuss, CV_GAUSSIAN,0, 0, 1, 0 ); //delta = 1
-	cvSmooth( patternImg, patternImgGuss, CV_GAUSSIAN,0, 0, 1, 0 ); //delta = 1
-	
 	//allocate memory on CPU to store SAD results
 	result_height = sourceImg->height - patternImg->height + 1;
 	result_width = sourceImg->width - patternImg->width + 1;
@@ -166,7 +158,6 @@ int main( int argc, char** argv )
 	
 	//call GPU.cu
 	device_call(sourceImg->imageData, patternImg->imageData, host_result, sourceImg->height, sourceImg->width, patternImg->height, patternImg->width, result_height, result_width);
-	//device_call(sourceImgGuss->imageData, patternImgGuss->imageData, host_result, sourceImgGuss->height, sourceImgGuss->width, patternImgGuss->height, patternImgGuss->width, result_height, result_width);
 	
 	
 	for( y=0; y < result_height; y++ ) {
@@ -192,13 +183,13 @@ int main( int argc, char** argv )
     pt2.y = pt1.y + patternImg->height;
 
     // Draw the rectangle in the source image
-    cvRectangle( sourceImgGuss, pt1, pt2, CV_RGB(255,0,0), 3, 8, 0 );
+    cvRectangle( sourceImg, pt1, pt2, CV_RGB(255,0,0), 3, 8, 0 );
 			
 
 	cvNamedWindow( "sourceImage", 1 );
-    cvShowImage( "sourceImage", sourceImgGuss );
+    cvShowImage( "sourceImage", sourceImg );
 	cvNamedWindow( "patternImage", 1 );
-    cvShowImage( "patternImage", patternImgGuss );
+    cvShowImage( "patternImage", patternImg );
 	
 		
     cvWaitKey(0); 
