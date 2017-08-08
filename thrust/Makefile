@@ -1,11 +1,11 @@
 NVCC30   = /usr/local/cuda/bin/nvcc
-SRC      = thrust7.cu
+SRC      = thrust1.cu
 INC30    = -I/usr/local/cuda/include
 LIB30    = -L/usr/local/cuda/lib:../lib
 ARGS13   = -arch=sm_13 -Xcudafe=-w
 ARGS20   = -arch=sm_20 -Xcudafe=-w
 ARGS30   = -arch=sm_30 -Xcudafe=-w
-o        = thrust7
+o        = thrust1
 
 all :: cuda13
 
