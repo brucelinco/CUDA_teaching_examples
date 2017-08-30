@@ -11,7 +11,7 @@ SRC_GPU	 = templateMatch_gpu.cu
 
 CC	 = g++
 
-all :: cpu
+all :: gpu
 cpu :
 	$(CC) $(SRC_CPU) -o $(obj_CPU) $(LIB_OPENCV)
 gpu :
