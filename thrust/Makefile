@@ -7,7 +7,7 @@ ARGS20   = -arch=sm_20 -Xcudafe=-w
 ARGS30   = -arch=sm_30 -Xcudafe=-w
 o        = thrust1
 
-all :: cuda13
+all :: cuda20
 
 cuda13 :
 	$(NVCC30) $(INC30) $(LIB30) $(ARGS13) -o $(o) $(SRC)

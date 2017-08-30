@@ -14,7 +14,7 @@
  */
 
 
-#include "../common/book.h"
+#include "../spec/book.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
