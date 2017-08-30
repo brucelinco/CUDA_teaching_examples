@@ -1,5 +1,6 @@
-#include "cv.h"
-#include "highgui.h"
+// openCV library 
+#include "opencv2/opencv.hpp"
+#include "opencv2/highgui.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -127,3 +128,8 @@ int main( int argc, char** argv )
     return 0;
 
 }
+
+
+
+
+

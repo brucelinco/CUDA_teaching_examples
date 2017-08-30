@@ -2,7 +2,7 @@ NVCC   = nvcc
 SRC    = *.c*
 INC    = -I/usr/local/cuda/include
 LIB    = -L/usr/local/cuda/lib64
-ARGS   = -arch=sm_13 -Xcudafe=-w
+ARGS   = -arch=sm_20 -Xcudafe=-w
 o      = cuda
 
 all :: compile
